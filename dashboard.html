@@ -68,21 +68,4 @@
   </script>
 </body>
 </html>
-    import { initAuthGuard, logoutUser } from "./js/firebase/auth.js";
-    import { getUserProfile } from "./js/firebase/database.js";
-
-    document.getElementById("logoutBtn").addEventListener("click", logoutUser);
-
-    initAuthGuard(async (user) => {
-      const profile = await getUserProfile(user.uid);
-      if (profile) {
-        document.getElementById("playerName").textContent = profile.displayName;
-        document.getElementById("playerLevel").textContent = profile.level;
-        document.getElementById("playerRank").textContent = profile.rank;
-        document.getElementById("playerXP").textContent = profile.xp;
-        document.getElementById("playerStreak").textContent = profile.streak;
-      }
-    });
-  </script>
-</body>
-</html>
+  
