@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life RPG — Enter the Realm</title>
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body class="rpg-body">
+  <div class="auth-container">
+    <h1>LIFE RPG</h1>
+    <p class="subtitle">Turn real life into an adventure.</p>
+    
+    <div class="auth-box">
+      <div class="tabs">
+        <button id="loginTabBtn" class="active">Login</button>
+        <button id="registerTabBtn">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <input type="email" id="loginEmail" placeholder="Email Address" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit" class="rpg-btn">Enter Realm</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form hidden">
+        <input type="text" id="regDisplayName" placeholder="Adventurer Name" required>
+        <input type="email" id="regEmail" placeholder="Email Address" required>
+        <input type="password" id="regPassword" placeholder="Password (min 6 chars)" required>
+        <button type="submit" class="rpg-btn">Create Character</button>
+      </form>
+
+      <div id="authError" class="error-msg"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { loginUser, registerUser } from "./js/firebase/auth.js";
+
+    const loginTabBtn = document.getElementById("loginTabBtn");
+    const registerTabBtn = document.getElementById("registerTabBtn");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const errorDiv = document.getElementById("authError");
+
+    loginTabBtn.addEventListener("click", () => {
+      loginTabBtn.classList.add("active");
+      registerTabBtn.classList.remove("active");
+      loginForm.classList.remove("hidden");
+      registerForm.classList.add("hidden");
+      errorDiv.textContent = "";
+    });
+
+    registerTabBtn.addEventListener("click", () => {
+      registerTabBtn.classList.add("active");
+      loginTabBtn.classList.remove("active");
+      registerForm.classList.remove("hidden");
+      loginForm.classList.add("hidden");
+      errorDiv.textContent = "";
+    });
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorDiv.textContent = "";
+      const email = document.getElementById("loginEmail").value;
+      const pass = document.getElementById("loginPassword").value;
+      const res = await loginUser(email, pass);
+      if (res.success) {
+        window.location.href = "dashboard.html";
+      } else {
+        errorDiv.textContent = res.error;
+      }
+    });
+
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorDiv.textContent = "";
+      const name = document.getElementById("regDisplayName").value;
+      const email = document.getElementById("regEmail").value;
+      const pass = document.getElementById("regPassword").value;
+      const res = await registerUser(email, pass, name);
+      if (res.success) {
+        window.location.href = "dashboard.html";
+      } else {
+        errorDiv.textContent = res.error;
+      }
+    });
+  </script>
+</body>
+</html>
