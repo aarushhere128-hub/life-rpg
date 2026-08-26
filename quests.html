@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life RPG — Quests & Goals</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/quests.css">
+</head>
+<body class="rpg-body">
+  <header class="rpg-header">
+    <h2>QUEST BOARD</h2>
+    <button id="logoutBtn" class="rpg-btn-secondary">Logout</button>
+  </header>
+
+  <main class="quests-container">
+    <!-- AI Proposals Section -->
+    <section id="proposalsSection" class="rpg-card hidden">
+      <h3>🤖 AI Strategist Proposals</h3>
+      <div id="proposalsList"></div>
+    </section>
+
+    <!-- Goals Management -->
+    <section class="rpg-card">
+      <h3>🎯 Goals</h3>
+      <form id="goalForm" class="rpg-form">
+        <input type="text" id="goalTitle" placeholder="Goal Title (e.g., Master Mathematics)" required>
+        <textarea id="goalDesc" placeholder="Description / Scope"></textarea>
+        <input type="text" id="goalCategory" placeholder="Category (e.g., Academics)" required>
+        <button type="submit" class="rpg-btn">Forge Goal</button>
+      </form>
+      <div id="goalsList" class="item-list"></div>
+    </section>
+
+    <!-- Quest Creation & List -->
+    <section class="rpg-card">
+      <h3>📜 Quests</h3>
+      <form id="questForm" class="rpg-form">
+        <select id="questGoalSelect" required>
+          <option value="">Select Target Goal</option>
+        </select>
+        <input type="text" id="questTitle" placeholder="Quest Title (e.g., Solve 15 problems)" required>
+        <textarea id="questDesc" placeholder="Execution Details"></textarea>
+        <div class="form-row">
+          <label>Difficulty (1-5): <input type="number" id="questDifficulty" min="1" max="5" value="3" required></label>
+          <label>Est. Minutes: <input type="number" id="questDuration" value="45" required></label>
+        </div>
+        <button type="submit" class="rpg-btn">Create Quest</button>
+      </form>
+      <div id="questsList" class="item-list"></div>
+    </section>
+    
+    <div id="questsError" class="error-msg"></div>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">HOME</a>
+    <a href="quests.html" class="nav-item active">QUESTS</a>
+    <a href="#" class="nav-item">AI</a>
+    <a href="#" class="nav-item">ARENA</a>
+    <a href="#" class="nav-item">PROFILE</a>
+  </nav>
+
+  <script type="module" src="js/pages/quests.js"></script>
+</body>
+</html>
