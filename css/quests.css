@@ -1,0 +1,107 @@
+.quests-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 20px 80px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rpg-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.rpg-card h3 {
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+.rpg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.rpg-form input, .rpg-form textarea, .rpg-form select {
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.rpg-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row label {
+  flex: 1;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rpg-item-row {
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.badge.status-available { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.badge.status-accepted { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+.badge.status-completed_pending_verification { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+
+.rpg-btn-sm {
+  background: var(--border);
+  color: var(--text-main);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+.rpg-btn-sm.primary { background: var(--primary); color: white; }
+.rpg-btn-sm.danger { background: var(--error); color: white; }
+
+.muted {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
