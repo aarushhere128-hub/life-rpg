@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life RPG — Dashboard</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="rpg-body">
+  <header class="rpg-header">
+    <h2>LIFE RPG</h2>
+    <button id="logoutBtn" class="rpg-btn-secondary">Logout</button>
+  </header>
+
+  <main class="dashboard-container">
+    <section class="profile-card">
+      <h3 id="playerName">Loading Hero...</h3>
+      <div class="stats-grid">
+        <div class="stat-item">Level: <span id="playerLevel">-</span></div>
+        <div class="stat-item">Rank: <span id="playerRank">-</span></div>
+        <div class="stat-item">XP: <span id="playerXP">-</span></div>
+        <div class="stat-item">Streak: <span id="playerStreak">-</span>🔥</div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item active">HOME</a>
+    <a href="#" class="nav-item">QUESTS</a>
+    <a href="#" class="nav-item">AI</a>
+    <a href="#" class="nav-item">ARENA</a>
+    <a href="#" class="nav-item">PROFILE</a>
+  </nav>
+
+  <script type="module">
+    import { initAuthGuard, logoutUser } from "./js/firebase/auth.js";
+    import { getUserProfile } from "./js/firebase/database.js";
+
+    document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+
+    initAuthGuard(async (user) => {
+      const profile = await getUserProfile(user.uid);
+      if (profile) {
+        document.getElementById("playerName").textContent = profile.displayName;
+        document.getElementById("playerLevel").textContent = profile.level;
+        document.getElementById("playerRank").textContent = profile.rank;
+        document.getElementById("playerXP").textContent = profile.xp;
+        document.getElementById("playerStreak").textContent = profile.streak;
+      }
+    });
+  </script>
+</body>
+</html>
