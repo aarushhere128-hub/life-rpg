@@ -72,12 +72,20 @@ export async function fetchUserQuests(userId) {
 }
 
 export async function updateQuestStatus(questId, newStatus) {
+  if (!questId) {
+    throw new Error("updateQuestStatus: missing questId");
+  }
   const questRef = doc(db, "quests", questId);
   const updateData = { status: newStatus };
   if (newStatus === "COMPLETED_PENDING_VERIFICATION") {
     updateData.completedAt = serverTimestamp();
   }
-  await updateDoc(questRef, updateData);
+  try {
+    await updateDoc(questRef, updateData);
+  } catch (err) {
+    console.error("Firestore updateQuestStatus failed for", questId, "->", newStatus, err);
+    throw err;
+  }
 }
 
 // --- AI PROPOSAL OPERATIONS (ATOMIC BATCH) ---
@@ -88,6 +96,16 @@ export async function fetchUserProposals(userId) {
 }
 
 export async function approveProposal(userId, proposal) {
+  if (!userId) {
+    throw new Error("approveProposal: missing userId");
+  }
+  if (!proposal || !proposal.proposalId) {
+    throw new Error("approveProposal: missing proposal or proposalId");
+  }
+  if (proposal.status !== 'PENDING') {
+    throw new Error("approveProposal: proposal must be PENDING to approve");
+  }
+
   const batch = writeBatch(db);
 
   // 1. Create the new quest reference atomically
@@ -109,7 +127,8 @@ export async function approveProposal(userId, proposal) {
     source: "AI_APPROVED",
     createdAt: serverTimestamp(),
     dueAt: Timestamp.fromDate(futureDate),
-    completedAt: null
+    completedAt: null,
+    proposalId: proposal.proposalId
   });
 
   // 2. Mark proposal approved in the same atomic transaction
@@ -117,10 +136,20 @@ export async function approveProposal(userId, proposal) {
   batch.update(proposalRef, { status: "APPROVED", updatedAt: serverTimestamp() });
 
   // Commit both writes atomically
-  await batch.commit();
+  try {
+    await batch.commit();
+  } catch (err) {
+    console.error("approveProposal: batch commit failed for proposalId=", proposal.proposalId, err);
+    throw err;
+  }
 }
 
 export async function dismissProposal(proposalId) {
   const proposalRef = doc(db, "questProposals", proposalId);
-  await updateDoc(proposalRef, { status: "DISMISSED", updatedAt: serverTimestamp() });
+  try {
+    await updateDoc(proposalRef, { status: "DISMISSED", updatedAt: serverTimestamp() });
+  } catch (err) {
+    console.error("dismissProposal failed for proposalId=", proposalId, err);
+    throw err;
+  }
 }
