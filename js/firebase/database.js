@@ -2,7 +2,7 @@ import { db } from "./config.js";
 import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 export async function createUserProfiles(userId, { email, displayName }) {
-  // 1. Private User Document (Email hidden from other players, immutable from client post-creation)
+  // 1. Private User Document
   const userRef = doc(db, "users", userId);
   await setDoc(userRef, {
     uid: userId,
@@ -10,7 +10,7 @@ export async function createUserProfiles(userId, { email, displayName }) {
     createdAt: serverTimestamp()
   });
 
-  // 2. Public Player Profile (Game stats initialized to base defaults)
+  // 2. Public Player Profile
   const playerRef = doc(db, "players", userId);
   await setDoc(playerRef, {
     uid: userId,
