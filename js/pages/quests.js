@@ -104,8 +104,14 @@ initAuthGuard(async (user) => {
           btn.className = "rpg-btn-sm";
           btn.textContent = "Accept";
           btn.addEventListener("click", async () => {
-            await updateQuestStatus(quest.questId, 'ACCEPTED');
-            loadData();
+            try {
+              errorDiv.textContent = "";
+              await updateQuestStatus(quest.questId, 'ACCEPTED');
+              await loadData();
+            } catch (err) {
+              console.error("Failed to accept quest:", err);
+              errorDiv.textContent = "Failed to accept quest: " + (err.message || err);
+            }
           });
           actionDiv.appendChild(btn);
         } else if (quest.status === 'ACCEPTED') {
@@ -113,8 +119,14 @@ initAuthGuard(async (user) => {
           btn.className = "rpg-btn-sm primary";
           btn.textContent = "Complete & Submit";
           btn.addEventListener("click", async () => {
-            await updateQuestStatus(quest.questId, 'COMPLETED_PENDING_VERIFICATION');
-            loadData();
+            try {
+              errorDiv.textContent = "";
+              await updateQuestStatus(quest.questId, 'COMPLETED_PENDING_VERIFICATION');
+              await loadData();
+            } catch (err) {
+              console.error("Failed to submit quest:", err);
+              errorDiv.textContent = "Failed to submit quest: " + (err.message || err);
+            }
           });
           actionDiv.appendChild(btn);
         }
@@ -147,16 +159,28 @@ initAuthGuard(async (user) => {
           approveBtn.className = "rpg-btn-sm";
           approveBtn.textContent = "Approve";
           approveBtn.addEventListener("click", async () => {
-            await approveProposal(prop);
-            loadData();
+            try {
+              errorDiv.textContent = "";
+              await approveProposal(user.uid, prop); // pass user.uid (fixed signature)
+              await loadData();
+            } catch (err) {
+              console.error("Failed to approve proposal:", err);
+              errorDiv.textContent = "Failed to approve proposal: " + (err.message || err);
+            }
           });
 
           const dismissBtn = document.createElement("button");
           dismissBtn.className = "rpg-btn-sm danger";
           dismissBtn.textContent = "Dismiss";
           dismissBtn.addEventListener("click", async () => {
-            await dismissProposal(prop.proposalId);
-            loadData();
+            try {
+              errorDiv.textContent = "";
+              await dismissProposal(prop.proposalId);
+              await loadData();
+            } catch (err) {
+              console.error("Failed to dismiss proposal:", err);
+              errorDiv.textContent = "Failed to dismiss proposal: " + (err.message || err);
+            }
           });
 
           actionDiv.appendChild(approveBtn);
@@ -212,4 +236,3 @@ initAuthGuard(async (user) => {
 
   loadData();
 });
-            
