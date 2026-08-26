@@ -22,6 +22,8 @@
         <div class="stat-item">XP: <span id="playerXP">-</span></div>
         <div class="stat-item">Streak: <span id="playerStreak">-</span>🔥</div>
       </div>
+      <!-- User-visible error container -->
+      <div id="dashboardError" class="error-msg" style="margin-top: 15px;"></div>
     </section>
   </main>
 
@@ -34,6 +36,38 @@
   </nav>
 
   <script type="module">
+    import { initAuthGuard, logoutUser } from "./js/firebase/auth.js";
+    import { getPlayerProfile } from "./js/firebase/database.js";
+
+    document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+
+    initAuthGuard(async (user) => {
+      const errorDiv = document.getElementById("dashboardError");
+      errorDiv.textContent = "";
+
+      try {
+        // Corrected function call matching database.js export
+        const profile = await getPlayerProfile(user.uid);
+        
+        if (profile) {
+          document.getElementById("playerName").textContent = profile.displayName || "Adventurer";
+          document.getElementById("playerLevel").textContent = profile.level ?? 1;
+          document.getElementById("playerRank").textContent = profile.rank || "Novice";
+          document.getElementById("playerXP").textContent = profile.xp ?? 0;
+          document.getElementById("playerStreak").textContent = profile.streak ?? 0;
+        } else {
+          errorDiv.textContent = "Warning: Player profile document not found in database.";
+          document.getElementById("playerName").textContent = "Unknown Hero";
+        }
+      } catch (err) {
+        console.error("Dashboard profile load error:", err);
+        errorDiv.textContent = "Failed to load player statistics. Please check your connection.";
+        document.getElementById("playerName").textContent = "Error Loading Hero";
+      }
+    });
+  </script>
+</body>
+</html>
     import { initAuthGuard, logoutUser } from "./js/firebase/auth.js";
     import { getUserProfile } from "./js/firebase/database.js";
 
